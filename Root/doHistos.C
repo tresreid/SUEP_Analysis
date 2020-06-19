@@ -1,4 +1,6 @@
 #define doHistos_cxx
+#define _LIBCPP_ENABLE_CXX17_REMOVED_AUTO_PTR
+
 #include "SUEP_Analysis/doHistos.h"
 #include "SUEP_Analysis/PlotHelper.h"
 #include "Root/jetStudies.C"
@@ -28,7 +30,7 @@ void doHistos::Loop(std::string s_sample,bool isMC)
       if (ientry%1000==0) std::cout << "Processed " << ientry << " events!" << std::endl;
 
 
-      // TODO 
+      // TODO
       float ht=0;
       float lead_jet_pt=0;
       float njets=0;
@@ -38,8 +40,8 @@ void doHistos::Loop(std::string s_sample,bool isMC)
       {
       	if ( Jets->at(i).Pt() < 30 ) continue;
       	if ( abs(Jets->at(i).Eta() ) > 2.0 ) continue;
-      		
-      	 
+
+
       	njets+=1;
       	ht += Jets->at(i).Pt();
 
@@ -65,7 +67,7 @@ void doHistos::Loop(std::string s_sample,bool isMC)
       {
       	if ( JetsAK8->at(i).Pt() < 30 ) continue;
       	if ( abs(JetsAK8->at(i).Eta() ) > 2.0 ) continue;
-      		
+
 
       	JetAK8 jetAK8;
 
@@ -77,10 +79,10 @@ void doHistos::Loop(std::string s_sample,bool isMC)
       plotter.Plot1D(Form("%s_testHT",s_sample.c_str()),";H_{T} [GeV]", ht, 20,0,2000 );
       plotter.Plot1D(Form("%s_HT"    ,s_sample.c_str()),";H_{T} [GeV]", HT, 20,0,2000 );
       plotter.Plot1D(Form("%s_njets" ,s_sample.c_str()),";n_{jets}", njets, 20,-0.5,19.5 );
-      
+
 
       /*
-      Packing Inner Detector Tracks 
+      Packing Inner Detector Tracks
       */
       int npfs=0;
       TLorentzVector trk_p4;
@@ -96,16 +98,16 @@ void doHistos::Loop(std::string s_sample,bool isMC)
       	Track track;
 
       	trk_p4.SetPtEtaPhiM(Tracks->at(i).Rho(), Tracks->at(i).Eta(), Tracks->at(i).Phi(), 0.13957);
-      	track.p4 = trk_p4; 
-      	
+      	track.p4 = trk_p4;
+
       	tracks.push_back(track);
       	npfs+=1;
-      }      
+      }
       plotter.Plot1D(Form("%s_nchpfs" ,s_sample.c_str()),";n_{chpfs}", npfs, 100,0,1000);
 
-      // * 
-      // Pass HT or jet triggers 
-      // * 
+      // *
+      // Pass HT or jet triggers
+      // *
       if (ht < 1200 && lead_jet_pt < 500) continue;
 
       plotter.Plot1D(Form("%s_trig_nchpfs" ,s_sample.c_str()),";n_{chpfs}", npfs, 100,0,1000);
@@ -125,7 +127,7 @@ void doHistos::Loop(std::string s_sample,bool isMC)
 
 
       // Pflow candidates
-      // Scan pT threshold 
+      // Scan pT threshold
       // Some Pflow cut...
 
 
@@ -139,7 +141,7 @@ void doHistos::Loop(std::string s_sample,bool isMC)
 
 int main(int argc, char* argv[]){
 
-    // defaults 
+    // defaults
     std::string tree_name = "TreeMaker2/PreSelection";
     std::string file_name = "infiles/SUEP_2018_mMed-750_mDark-2_temp-2_decay-generic_13TeV-pythia8_AnalysisTree.root";
     std::string sample_name = "mMed-750_mDark-2_temp-2_decay-generic";
