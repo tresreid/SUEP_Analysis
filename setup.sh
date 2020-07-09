@@ -1,6 +1,28 @@
-source /cvmfs/cms.cern.ch/slc7_amd64_gcc530/external/gcc/5.3.0/etc/profile.d/init.sh
-#source /cvmfs/cms.cern.ch/slc7_amd64_gcc493/lcg/root/6.06.00/bin/thisroot.sh
-#source /cvmfs/cms.cern.ch/slc7_amd64_gcc530/lcg/root/6.08.07-njopjo/bin/thisroot.sh
-#source /cvmfs/cms.cern.ch/slc7_amd64_gcc530/lcg/root/6.08.07/bin/thisroot.sh
-#source /cvmfs/cms.cern.ch/slc7_amd64_gcc700/lcg/root/6.12.07/bin/thisroot.sh
+# Export project base directory
+export SUEP_BASE=$PWD
+
+# Setup environment
 source /cvmfs/sft.cern.ch/lcg/views/LCG_97rc4/x86_64-centos7-gcc9-opt/setup.sh
+
+# Create necessary directories
+if [ ! -d "$SUEP_BASE/output" ]
+then
+  mkdir $SUEP_BASE/output
+fi
+if [ ! -d "$SUEP_BASE/plots" ]
+then
+  mkdir $SUEP_BASE/plots
+fi
+
+# Install fastjet locally
+if [ ! -d "$SUEP_BASE/fastjet-install"]
+then
+  curl -O http://fastjet.fr/repo/fastjet-3.3.4.tar.gz
+  tar zxvf fastjet-3.3.4.tar.gz
+  cd $SUEP_BASE/fastjet-3.3.4
+  ./configure --prefix=$SUEP_BASE/fastjet-install
+  make -j 8
+  make check
+  make install
+  cd $SUEP_BASE
+fi
