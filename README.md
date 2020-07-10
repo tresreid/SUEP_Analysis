@@ -7,21 +7,25 @@ cd nobackup
 mkdir SUEPs
 cd SUEPs
 git clone https://github.com/kdipetri/SUEP_Analysis.git
-```
-* install fastjet in SUEPs directory, following these directions http://fastjet.fr/quickstart.html
-```
 cd SUEP_Analysis
-source setup.sh 
+```
+Setup the working space and install FastJet locally
+```
+source setup.sh -fastjet
+```
+Every other time you only need to issue
+```
+source setup.sh
 ```
 
 # Histogram Making Step
 * A C++ event loop is used to make histograms
-* There are helper scripts to make histograms, pack structures for physics objects, etc 
+* There are helper scripts to make histograms, pack structures for physics objects, etc
 * FastJet is included to make fatjets from tracks in Root/jetStudies.C
 * The event loop lives in Root/doHistos.C
 ```
-source compile.sh 
-source run.sh 
+source compile.sh
+source run.sh
 ```
 
 # Plot Making Step
@@ -33,7 +37,7 @@ python util/make_displays.py
 
 # Tips
 * Be sure to make output, plot directories to store output histograms and output plots
-* Double check location of rootfiles 
+* Double check location of rootfiles
 
 # Signal n-tuples live here
 ```
@@ -45,4 +49,3 @@ eosls /store/user/kdipetri/SUEP/Production_v0.0/2018/merged_NTUP
 - scalar pdgId = 25
 - dark meson pdgId = 999999
 - dark photon pdgId = 999998
-
