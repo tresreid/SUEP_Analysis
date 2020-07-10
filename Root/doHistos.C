@@ -1,10 +1,11 @@
 #define doHistos_cxx
-#define _LIBCPP_ENABLE_CXX17_REMOVED_AUTO_PTR
 
 #include "SUEP_Analysis/doHistos.h"
 #include "SUEP_Analysis/PlotHelper.h"
 #include "Root/jetStudies.C"
 #include "Root/eventDisplays.C"
+#include "Root/eventShapes.C"
+#include "Root/kinematics.C"
 #include <TH2.h>
 #include <TStyle.h>
 #include <TCanvas.h>
@@ -84,16 +85,25 @@ void doHistos::Loop(std::string s_sample,bool isMC)
       /*
       Packing Inner Detector Tracks
       */
-      int npfs=0;
+      unsigned int index=0;
+      npfs=0;
+      npfs_09=0;
+      npfs_08=0;
+      npfs_07=0;
+      npfs_2=0; // for phase 2 question
       TLorentzVector trk_p4;
       std::vector<Track> tracks; tracks.clear();
       for (unsigned int i = 0; i <Tracks_fromPV0->size(); i++)
       {
 
-      	if (Tracks->at(i).Rho() < 1.0) continue; // pT cut 1 GeV, to be optimized
       	if (abs(Tracks->at(i).Eta()) > 2.5) continue;
       	if (Tracks_fromPV0->at(i) < 2) continue;
       	if (Tracks_matchedToPFCandidate->at(i) == 0) continue;
+        if (Tracks->at(i).Rho() > 0.7) npfs_07 +=1;
+        if (Tracks->at(i).Rho() > 0.8) npfs_08 +=1;
+        if (Tracks->at(i).Rho() > 0.9) npfs_09 +=1;
+        if (Tracks->at(i).Rho() < 1.0) continue; // pT cut 1 GeV, to be optimized
+        if (Tracks->at(i).Rho() > 2.0) npfs_2 +=1;
 
       	Track track;
 
@@ -102,34 +112,48 @@ void doHistos::Loop(std::string s_sample,bool isMC)
 
       	tracks.push_back(track);
       	npfs+=1;
+        plotter.Plot1D(Form("%s_chpfs_pt" ,s_sample.c_str()),";chPFs pT", track.p4.Pt(), 100,0,10);
       }
-      plotter.Plot1D(Form("%s_nchpfs" ,s_sample.c_str()),";n_{chpfs}", npfs, 100,0,1000);
+
+      // For a little speedup
+      if (ht < 500) continue;
 
       // *
-      // Pass HT or jet triggers
+      // Pass scouting or offline triggers
       // *
-      if (ht < 1200 && lead_jet_pt < 500) continue;
+      if (ht > 500){// Scouting stream
 
-      plotter.Plot1D(Form("%s_trig_nchpfs" ,s_sample.c_str()),";n_{chpfs}", npfs, 100,0,1000);
+        basic_kinematics(s_sample,"scouting");
+
+        plotEventShapes(s_sample, "scouting", tracks);
+
+        fatjet_plots(s_sample, "scouting" ,tracks, ientry, 2.0);
+        fatjet_plots(s_sample, "scouting" ,tracks, ientry, 1.5);
+
+      }
+      if (ht > 1200 || lead_jet_pt > 500) {
+
+        basic_kinematics(s_sample,"offline");
+
+        plotEventShapes(s_sample, "offline", tracks);
+
+        fatjet_plots(s_sample, "offline" ,tracks, ientry, 2.0);
+        fatjet_plots(s_sample, "offline" ,tracks, ientry, 1.5);
+
+      }
 
 
+      // *
       // Event displays with jets that come out of the box
-      eventdisplays_tracks(s_sample,ientry,tracks);
-      //eventdisplays_jets(s_sample,ientry,jets);
-      //eventdisplays_jetAK8s(s_sample,ientry,jetsAK8);
-
-
-      // Trying different jet cone sizes and algorithms here...
-      makeJets(s_sample, ientry, tracks, 0.8);
-      makeJets(s_sample, ientry, tracks, 1.5);
-      makeJets(s_sample, ientry, tracks, 2.0);
-
-
+      // *
+      if (ientry < 100) {//scouting
+        eventdisplays_tracks(s_sample,ientry,tracks);
+        eventdisplays_jets(s_sample,ientry,jets);
+      }
 
       // Pflow candidates
       // Scan pT threshold
       // Some Pflow cut...
-
 
       // Pile-up distributions - post trigger
       plotter.Plot1D(Form("%s_trueNint" ,s_sample.c_str()),";True Nint" , TrueNumInteractions	, 20,0,100 );
@@ -148,7 +172,6 @@ int main(int argc, char* argv[]){
     std::string output_name = "mMed-750_mDark-2_temp-2_decay-generic";
 
     // Pick file
-    // ./doHistos sample_name
     if (argc > 1){
         sample_name = argv[1];
         output_name = argv[1];
@@ -164,7 +187,7 @@ int main(int argc, char* argv[]){
     TFile *file = TFile::Open(file_name.c_str());
     TTree *tree = (TTree*)file->Get(tree_name.c_str());
 
-	// Figure out if is MC
+  	// Figure out if is MC
     bool isMC = 1;
     if (sample_name=="data") isMC = 0;
 
