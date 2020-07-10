@@ -26,6 +26,7 @@ function FASTJET {
   make check
   make install
   cd $SUEP_BASE
+  rm -rf fastjet-3.3.4/ fastjet-3.3.4.tar.gz
   exit 1
 }
 

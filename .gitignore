@@ -56,3 +56,6 @@ docker_stderror
 *.png
 *.eps
 doHistos
+fastjet-install/
+plots/
+output/
