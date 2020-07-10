@@ -11,7 +11,8 @@ cd SUEP_Analysis
 ```
 Setup the working space and install FastJet locally
 ```
-source setup.sh -fastjet
+chmod +x setup.sh
+./setup.sh -f
 ```
 Every other time you only need to issue
 ```

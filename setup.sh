@@ -29,9 +29,9 @@ function FASTJET {
   exit 1
 }
 
-while getopts fastjet OPT; do
+while getopts "f" OPT; do
   case $OPT in
-    fastjet)
+    f)
       FASTJET
       ;;
   esac
