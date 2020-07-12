@@ -6,13 +6,14 @@
 #include "Root/eventDisplays.C"
 #include "Root/eventShapes.C"
 #include "Root/kinematics.C"
+#include "Root/isrTagger.C"
 #include <TH2.h>
 #include <TStyle.h>
 #include <TCanvas.h>
 
 void doHistos::Loop(std::string s_sample,bool isMC)
 {
-	//////////////////////////////////////////////////////
+	  //////////////////////////////////////////////////////
     // Loops over the input ntuple from a given sample  //
     //////////////////////////////////////////////////////
 
@@ -49,7 +50,6 @@ void doHistos::Loop(std::string s_sample,bool isMC)
 
       if (ientry%1000==0) std::cout << "Processed " << ientry << " events!" << std::endl;
 
-
       // TODO
       float ht=0;
       float lead_jet_pt=0;
@@ -61,12 +61,10 @@ void doHistos::Loop(std::string s_sample,bool isMC)
       	if ( Jets->at(i).Pt() < 30 ) continue;
       	if ( abs(Jets->at(i).Eta() ) > 2.0 ) continue;
 
-
       	njets+=1;
       	ht += Jets->at(i).Pt();
 
       	Jet jet;
-
       	jet_p4 = Jets->at(i);
       	jet.p4 = jet_p4;
 
@@ -78,9 +76,7 @@ void doHistos::Loop(std::string s_sample,bool isMC)
       plotter.Plot1D(Form("%s_HT"    ,s_sample.c_str()),";H_{T} [GeV]", HT, 20,0,2000 );
       plotter.Plot1D(Form("%s_njets" ,s_sample.c_str()),";n_{jets}", njets, 20,-0.5,19.5 );
 
-      /*
-      Fat jets
-      */
+      // Fat jets
       TLorentzVector jetAK8_p4;
       std::vector<JetAK8> jetsAK8; jetsAK8.clear();
       for (unsigned int i = 0; i <JetsAK8_ID->size(); i++)
@@ -101,9 +97,7 @@ void doHistos::Loop(std::string s_sample,bool isMC)
       plotter.Plot1D(Form("%s_njets" ,s_sample.c_str()),";n_{jets}", njets, 20,-0.5,19.5 );
 
 
-      /*
-      Packing Inner Detector Tracks
-      */
+      // Packing Inner Detector Tracks
       unsigned int index=0;
       npfs=0;
       npfs_09=0;
@@ -137,42 +131,27 @@ void doHistos::Loop(std::string s_sample,bool isMC)
       // For a little speedup
       if (ht < 500) continue;
 
-      // *
+      // Find ISR jet (hardest)
+      Jet isr_jet = isrTagger(jets);
+      plotter.Plot1D(Form("%s_ISR_pt",s_sample.c_str()),";ISR_pt", isr_jet.p4.Pt(), 100,0,1000 );
+      plotter.Plot1D(Form("%s_ISR_y",s_sample.c_str()),";ISR_y", isr_jet.p4.Rapidity(), 100,-6,6 );
+      plotter.Plot1D(Form("%s_ISR_phi",s_sample.c_str()),";ISR_phi", isr_jet.p4.Phi(), 100,-6.5,6.5 );
+
       // Pass scouting or offline triggers
-      // *
       if (ht > 500){// Scouting stream
-
         basic_kinematics(s_sample,"scouting");
-
         plotEventShapes(s_sample, "scouting", tracks);
-
-        //fatjet_plots(s_sample, "scouting" ,tracks, ientry, 2.0);
-        //fatjet_plots(s_sample, "scouting" ,tracks, ientry, 1.5);
-
       }
       if (ht > 1200 || lead_jet_pt > 500) {
-
         basic_kinematics(s_sample,"offline");
-
         plotEventShapes(s_sample, "offline", tracks);
-
-        //fatjet_plots(s_sample, "offline" ,tracks, ientry, 2.0);
-        //fatjet_plots(s_sample, "offline" ,tracks, ientry, 1.5);
-
       }
 
-
-      // *
       // Event displays with jets that come out of the box
-      // *
       if (ientry < 100) {//scouting
         eventdisplays_tracks(s_sample,ientry,tracks);
         eventdisplays_jets(s_sample,ientry,jets);
       }
-
-      // Pflow candidates
-      // Scan pT threshold
-      // Some Pflow cut...
 
       // Pile-up distributions - post trigger
       plotter.Plot1D(Form("%s_trueNint" ,s_sample.c_str()),";True Nint" , TrueNumInteractions	, 20,0,100 );
