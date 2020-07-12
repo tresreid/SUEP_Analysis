@@ -1,6 +1,6 @@
 #define isrTagger_cxx
 
-void isrTagger(std::vector<Jet> jets) {
+Jet isrTagger(std::vector<Jet> jets) {
   Jet isr_jet;
   Jet lead_pt_jet;
   Jet second_pt_jet;
