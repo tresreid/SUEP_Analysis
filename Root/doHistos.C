@@ -133,6 +133,7 @@ void doHistos::Loop(std::string s_sample,bool isMC)
 
       // Find ISR jet (hardest)
       Jet isr_jet = isrTagger(jets);
+      std::cout << "ISR jet has: " << isr_jet.p4.Pt() << ", " << isr_jet.p4.Rapidity() << std::endl;
       plotter.Plot1D(Form("%s_ISR_pt",s_sample.c_str()),";ISR_pt", isr_jet.p4.Pt(), 50,0,300 );
       plotter.Plot1D(Form("%s_ISR_y",s_sample.c_str()),";ISR_y", isr_jet.p4.Rapidity(), 50,-2,2 );
       plotter.Plot1D(Form("%s_ISR_phi",s_sample.c_str()),";ISR_phi", isr_jet.p4.Phi(), 50,-6.5,6.5 );
