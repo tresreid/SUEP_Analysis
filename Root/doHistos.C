@@ -175,7 +175,7 @@ int main(int argc, char* argv[]){
         output_name = argv[1];
         std::string str = "QCD";
         std::size_t found = sample_name.find(str);
-        if (found!=std::string::npos) {
+        if (found==std::string::npos) {
           file_name = Form("root://cmseos.fnal.gov//store/user/kdipetri/SUEP/Production_v0.0/2018/merged_NTUP/SUEP_2018_%s_13TeV-pythia8_AnalysisTree.root",sample_name.c_str());
         } else {
           file_name = Form("root://cmseos.fnal.gov//store/user/kdipetri/SUEP/Production_v0.0/2018/merged_NTUP/%s_TuneCP5_13TeV-madgraphMLM-pythia8_AnalysisTree.root",sample_name.c_str());
