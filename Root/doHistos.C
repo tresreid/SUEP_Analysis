@@ -133,9 +133,9 @@ void doHistos::Loop(std::string s_sample,bool isMC)
 
       // Find ISR jet (hardest)
       Jet isr_jet = isrTagger(jets);
-      plotter.Plot1D(Form("%s_ISR_pt",s_sample.c_str()),";ISR_pt", isr_jet.p4.Pt(), 100,0,1000 );
-      plotter.Plot1D(Form("%s_ISR_y",s_sample.c_str()),";ISR_y", isr_jet.p4.Rapidity(), 100,-6,6 );
-      plotter.Plot1D(Form("%s_ISR_phi",s_sample.c_str()),";ISR_phi", isr_jet.p4.Phi(), 100,-6.5,6.5 );
+      plotter.Plot1D(Form("%s_ISR_pt",s_sample.c_str()),";ISR_pt", isr_jet.p4.Pt(), 50,0,1000 );
+      plotter.Plot1D(Form("%s_ISR_y",s_sample.c_str()),";ISR_y", isr_jet.p4.Rapidity(), 50,-6,6 );
+      plotter.Plot1D(Form("%s_ISR_phi",s_sample.c_str()),";ISR_phi", isr_jet.p4.Phi(), 50,-6.5,6.5 );
 
       // Pass scouting or offline triggers
       if (ht > 500){// Scouting stream
@@ -173,7 +173,13 @@ int main(int argc, char* argv[]){
     if (argc > 1){
         sample_name = argv[1];
         output_name = argv[1];
-        file_name = Form("root://cmseos.fnal.gov//store/user/kdipetri/SUEP/Production_v0.0/2018/merged_NTUP/SUEP_2018_%s_13TeV-pythia8_AnalysisTree.root",sample_name.c_str());
+        std::string str = "QCD";
+        std::size_t found = sample_name.find(str);
+        if (found!=std::string::npos) {
+          file_name = Form("root://cmseos.fnal.gov//store/user/kdipetri/SUEP/Production_v0.0/2018/merged_NTUP/SUEP_2018_%s_13TeV-pythia8_AnalysisTree.root",sample_name.c_str());
+        } else {
+          file_name = Form("root://cmseos.fnal.gov//store/user/kdipetri/SUEP/Production_v0.0/2018/merged_NTUP/%s_TuneCP5_13TeV-madgraphMLM-pythia8_AnalysisTree.root",sample_name.c_str());
+        }
     }
 
     std::cout << "Starting SUEP Studies!" << std::endl;
