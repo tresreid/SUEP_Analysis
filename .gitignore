@@ -51,6 +51,9 @@ docker_stderror
 # ROOT files
 *.root
 
+# Python files
+*.pyc
+
 # Project related files
 *.pdf
 *.png
