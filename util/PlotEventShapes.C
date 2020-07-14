@@ -4,6 +4,8 @@
 void PlotEventShapes(){
   // Defining all values needed
   const TString path = "root://cmseos.fnal.gov//store/user/chpapage/SUEPs/";
+  // or locally
+  // const TString path = "output";
   const TString variable[] = {"sphericity","aplanarity","isotropy","circularity","c","d"};
   const TString model[] = {"generic","darkPho","darkPhoHad"};
   const TString stream[] = {"offline","scouting"};

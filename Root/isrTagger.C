@@ -23,11 +23,22 @@ std::pair<Jet, Jet> isrTagger(std::vector<Jet> jets) {
     if (jet.p4.Rapidity()>0){
       if (jet.p4.Rapidity()>lead_y_p) {
         lead_y_p = jet.p4.Rapidity();
+        second_y_p_jet = lead_y_p_jet;
+        lead_y_p_jet = jet;
       }
     }else {
-
+      if (jet.p4.Rapidity()<lead_y_m) {
+        lead_y_m = jet.p4.Rapidity();
+        second_y_m_jet = lead_y_m_jet;
+        lead_y_m_jet = jet;
+      }
     }
+  }
+
+  if (abs(lead_y_p_jet-second_y_p_jet)>abs(lead_y_m_jet-second_y_m_jet)) {
+    lead_y_jet = lead_y_p_jet;
+  } else {
+    lead_y_jet = lead_y_m_jet;
   }
   return std::make_pair(lead_pt_jet,lead_y_jet);
 }
-
