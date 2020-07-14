@@ -1,16 +1,16 @@
-TH1F* plotQCD(const TString variable, const int n_bkg, const TString bkg[], const TString stream, const Float_t xs[]) {
+TH1F* plotQCD(const TString variable, const TString path, const int n_bkg, const TString bkg[], const TString stream, const Float_t xs[]) {
   TFile* f_bkg[n_bkg];
   TH1F* hb[n_bkg];
   TH1F* h_bkg = new TH1F("h_bkg","QCD "+variable,100,0,1);
   for (int i = 0; i < n_bkg; ++i) {
-    f_bkg[i] = TFile::Open("output/"+bkg[i]+".root");
-    hb[i] = (TH1F*)f_bkg[i]->Get(bkg[i]+"_"+stream+"_"+variable+"_sphericity");
+    f_bkg[i] = TFile::Open(path+"/"+bkg[i]+".root");
+    hb[i] = (TH1F*)f_bkg[i]->Get(bkg[i]+"_"+stream+"_evtshape_"+variable);
     h_bkg->Add(hb[i],xs[i]);
   }
   return h_bkg;
 }
 
-void Plotter(const TString variable, const TString model, const int n_sgnl, const TString sgnl[],
+void Plotter(const TString variable, const TString model, const TString path, const int n_sgnl, const TString sgnl[],
                     const int n_bkg, const TString bkg[], const TString stream,
                     const Float_t scale[], const Float_t xs[]) {
   set_root_style();
@@ -19,13 +19,13 @@ void Plotter(const TString variable, const TString model, const int n_sgnl, cons
   TFile* fs[n_sgnl];
   TH1F* hs[n_sgnl];
   THStack* h_signal = new THStack();
-  TH1F* hQCD = plotQCD(variable, n_bkg, bkg, stream, xs);
+  TH1F* hQCD = plotQCD(variable, path, n_bkg, bkg, stream, xs);
   TLegend* lg_s = new TLegend(0.27,0.75,0.87,0.92);
   TLegend* lg_bkg = new TLegend(0.27,0.7,0.87,0.75);
   TLatex ltx;
 
   for (int i = 0; i < n_sgnl; ++i) {
-    fs[i] = TFile::Open("output/"+sgnl[i]+"_decay-"+model+".root");
+    fs[i] = TFile::Open(path+"/"+sgnl[i]+"_decay-"+model+".root");
     hs[i] = (TH1F*)fs[i]->Get(sgnl[i]+"_decay-"+model+"_"+stream+"_evtshape_"+variable);
     hs[i]->Scale(scale[i]/hs[i]->Integral());
     h_signal->Add(hs[i]);

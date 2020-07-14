@@ -3,6 +3,7 @@
 
 void PlotEventShapes(){
   // Defining all values needed
+  const TString path = "root://cmseos.fnal.gov//store/user/chpapage/SUEPs/";
   const TString variable[] = {"sphericity","aplanarity","isotropy","circularity","c","d"};
   const TString model[] = {"generic","darkPho","darkPhoHad"};
   const TString stream[] = {"offline","scouting"};
@@ -21,11 +22,11 @@ void PlotEventShapes(){
   const int n_bkg = sizeof(bkg)/sizeof(bkg[0]);
 
   for (int i = 0; i < 6; ++i) {
-    Plotter(variable[i], model[0], n_sgnl, sgnl, n_bkg, bkg, stream[0], scale, xs);
-    Plotter(variable[i], model[1], n_sgnl, sgnl, n_bkg, bkg, stream[0], scale, xs);
-    Plotter(variable[i], model[2], n_sgnl, sgnl, n_bkg, bkg, stream[0], scale, xs);
-    Plotter(variable[i], model[0], n_sgnl, sgnl, n_bkg, bkg, stream[1], scale, xs);
-    Plotter(variable[i], model[1], n_sgnl, sgnl, n_bkg, bkg, stream[1], scale, xs);
-    Plotter(variable[i], model[2], n_sgnl, sgnl, n_bkg, bkg, stream[1], scale, xs);
+    Plotter(variable[i], model[0], path, n_sgnl, sgnl, n_bkg, bkg, stream[0], scale, xs);
+    Plotter(variable[i], model[1], path, n_sgnl, sgnl, n_bkg, bkg, stream[0], scale, xs);
+    Plotter(variable[i], model[2], path, n_sgnl, sgnl, n_bkg, bkg, stream[0], scale, xs);
+    Plotter(variable[i], model[0], path, n_sgnl, sgnl, n_bkg, bkg, stream[1], scale, xs);
+    Plotter(variable[i], model[1], path, n_sgnl, sgnl, n_bkg, bkg, stream[1], scale, xs);
+    Plotter(variable[i], model[2], path, n_sgnl, sgnl, n_bkg, bkg, stream[1], scale, xs);
   }
 }
