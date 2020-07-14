@@ -35,7 +35,7 @@ std::pair<Jet, Jet> isrTagger(std::vector<Jet> jets) {
     }
   }
 
-  if (abs(lead_y_p_jet-second_y_p_jet)>abs(lead_y_m_jet-second_y_m_jet)) {
+  if (abs(lead_y_p_jet.p4.Rapidity()-second_y_p_jet).p4.Rapidity()>abs(lead_y_m_jet.p4.Rapidity()-second_y_m_jet.p4.Rapidity())) {
     lead_y_jet = lead_y_p_jet;
   } else {
     lead_y_jet = lead_y_m_jet;
