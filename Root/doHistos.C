@@ -133,10 +133,10 @@ void doHistos::Loop(std::string s_sample,bool isMC)
 
       // Find ISR jet (hardest)
       Jet isr_jet = isrTagger(jets);
-      std::cout << "ISR jet has: " << isr_jet.p4.Pt() << ", " << isr_jet.p4.Rapidity() << std::endl;
-      plotter.Plot1D(Form("%s_ISR_pt",s_sample.c_str()),";ISR_pt", isr_jet.p4.Pt(), 50,0,300 );
-      plotter.Plot1D(Form("%s_ISR_y",s_sample.c_str()),";ISR_y", isr_jet.p4.Rapidity(), 50,-2,2 );
-      plotter.Plot1D(Form("%s_ISR_phi",s_sample.c_str()),";ISR_phi", isr_jet.p4.Phi(), 50,-6.5,6.5 );
+      //std::cout << "ISR jet has: " << isr_jet.p4.Pt() << ", " << isr_jet.p4.Rapidity() << std::endl;
+      plotter.Plot1D(Form("%s_ISR_pt",s_sample.c_str()),";ISR_pt", isr_jet.p4.Pt(), 50,0,1000 );
+      plotter.Plot1D(Form("%s_ISR_y",s_sample.c_str()),";ISR_y", isr_jet.p4.Rapidity(), 50,-4,4 );
+      plotter.Plot1D(Form("%s_ISR_phi",s_sample.c_str()),";ISR_phi", isr_jet.p4.Phi(), 50,-5,5 );
 
       // Pass scouting or offline triggers
       if (ht > 500){// Scouting stream
@@ -201,7 +201,7 @@ int main(int argc, char* argv[]){
     analysis.Loop(sample_name,isMC);
 
     // Save histograms here
-    TFile *output_file = TFile::Open(Form("output/%s.root",output_name.c_str()),"RECREATE");
+    TFile *output_file = TFile::Open(Form("root://cmseos.fnal.gov//store/user/chpapage/SUEPs/%s.root",output_name.c_str()),"RECREATE");
     c1->SetTickx(true);
     c1->SetTicky(true);
     plotter.DrawAll1D(c1);

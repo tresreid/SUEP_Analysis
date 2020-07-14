@@ -13,7 +13,9 @@ Jet isrTagger(std::vector<Jet> jets) {
       lead_pt = jet.p4.Pt();
       second_pt_jet = lead_pt_jet;
       lead_pt_jet = jet;
+      //std::cout << lead_pt << "\n";
     }
   }
-  return isr_jet;
+  return lead_pt_jet;
+  //return isr_jet;
 }
