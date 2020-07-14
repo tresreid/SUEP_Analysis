@@ -11,11 +11,10 @@
 #include <TStyle.h>
 #include <TCanvas.h>
 
-void doHistos::Loop(std::string s_sample,bool isMC)
-{
-	  //////////////////////////////////////////////////////
-    // Loops over the input ntuple from a given sample  //
-    //////////////////////////////////////////////////////
+void doHistos::Loop(std::string s_sample,bool isMC) {
+   //////////////////////////////////////////////////////
+   // Loops over the input ntuple from a given sample  //
+   //////////////////////////////////////////////////////
 
    if (fChain == 0) return;
 
@@ -59,7 +58,7 @@ void doHistos::Loop(std::string s_sample,bool isMC)
       for (unsigned int i = 0; i <Jets_ID->size(); i++)
       {
       	if ( Jets->at(i).Pt() < 30 ) continue;
-      	if ( abs(Jets->at(i).Eta() ) > 2.0 ) continue;
+      	//if ( abs(Jets->at(i).Eta() ) > 2.0 ) continue;
 
       	njets+=1;
       	ht += Jets->at(i).Pt();

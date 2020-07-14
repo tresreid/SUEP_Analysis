@@ -14,6 +14,7 @@ void Plotter(const TString variable, const TString model, const TString path, co
                     const int n_bkg, const TString bkg[], const TString stream,
                     const Float_t scale[], const Float_t xs[]) {
   set_root_style();
+  int rebin_ratio = 4;
 
   TCanvas* c = new TCanvas(model,model,1);
   TFile* fs[n_sgnl];
@@ -28,8 +29,9 @@ void Plotter(const TString variable, const TString model, const TString path, co
     fs[i] = TFile::Open(path+"/"+sgnl[i]+"_decay-"+model+".root");
     hs[i] = (TH1F*)fs[i]->Get(sgnl[i]+"_decay-"+model+"_"+stream+"_evtshape_"+variable);
     hs[i]->Scale(scale[i]/hs[i]->Integral());
+    hs[i]->Rebin(bin_ratio);
     h_signal->Add(hs[i]);
-    hs[i]->SetLineWidth(2);
+    hs[i]->SetLineWidth(3);
     lg_s->AddEntry(hs[i],sgnl[i]+"_decay-"+model,"l");
   }
 
@@ -39,7 +41,8 @@ void Plotter(const TString variable, const TString model, const TString path, co
   lg_s->SetTextSize(0.03);
   lg_s->Draw();
   hQCD->Scale(scale[n_sgnl]/hQCD->Integral());
-  hQCD->SetLineWidth(2);
+  hQCD->Rebin(bin_ratio);
+  hQCD->SetLineWidth(3);
   hQCD->Draw("hist same");
   lg_bkg->AddEntry(hQCD,"QCD ","l");
   lg_bkg->SetBorderSize(0);
