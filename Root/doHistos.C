@@ -137,13 +137,13 @@ void doHistos::Loop(std::string s_sample,bool isMC) {
       }
       if (ht > 1200 || lead_jet_pt > 500) {
         // Find ISR jet (hardest)
-        std::pair<Jet,Jet> isr_jet = isrTagger(jets);
-        plotter.Plot1D(Form("%s_offline_ISRpt_pt",s_sample.c_str()),";ISR_pt", isr_jet.first.p4.Pt(), 50,0,1200 );
-        plotter.Plot1D(Form("%s_offline_ISRpt_y",s_sample.c_str()),";ISR_y", isr_jet.first.p4.Rapidity(), 50,-5,5 );
-        plotter.Plot1D(Form("%s_offline_ISRpt_phi",s_sample.c_str()),";ISR_phi", isr_jet.first.p4.Phi(), 50,-5,5 );
-        plotter.Plot1D(Form("%s_offline_ISRy_pt",s_sample.c_str()),";ISR_pt", isr_jet.second.p4.Pt(), 50,0,1200 );
-        plotter.Plot1D(Form("%s_offline_ISRy_y",s_sample.c_str()),";ISR_y", isr_jet.second.p4.Rapidity(), 50,-5,5 );
-        plotter.Plot1D(Form("%s_offline_ISRy_phi",s_sample.c_str()),";ISR_phi", isr_jet.second.p4.Phi(), 50,-5,5 );
+        //std::pair<Jet,Jet> isr_jet = isrTagger(jets);
+        //plotter.Plot1D(Form("%s_offline_ISRpt_pt",s_sample.c_str()),";ISR_pt", isr_jet.first.p4.Pt(), 50,0,1200 );
+        //plotter.Plot1D(Form("%s_offline_ISRpt_y",s_sample.c_str()),";ISR_y", isr_jet.first.p4.Rapidity(), 50,-5,5 );
+        //plotter.Plot1D(Form("%s_offline_ISRpt_phi",s_sample.c_str()),";ISR_phi", isr_jet.first.p4.Phi(), 50,-5,5 );
+        //plotter.Plot1D(Form("%s_offline_ISRy_pt",s_sample.c_str()),";ISR_pt", isr_jet.second.p4.Pt(), 50,0,1200 );
+        //plotter.Plot1D(Form("%s_offline_ISRy_y",s_sample.c_str()),";ISR_y", isr_jet.second.p4.Rapidity(), 50,-5,5 );
+        //plotter.Plot1D(Form("%s_offline_ISRy_phi",s_sample.c_str()),";ISR_phi", isr_jet.second.p4.Phi(), 50,-5,5 );
         basic_kinematics(s_sample,"offline");
         plotEventShapes(s_sample, "offline", tracks);
       }
