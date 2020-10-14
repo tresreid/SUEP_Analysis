@@ -130,8 +130,8 @@ void doHistos::Loop(std::string s_sample,bool isMC)
 
 
       // Event displays with jets that come out of the box
-      eventdisplays_tracks(s_sample,ientry,tracks);
-      //eventdisplays_jets(s_sample,ientry,jets);
+      //eventdisplays_tracks(s_sample,ientry,tracks);
+      eventdisplays_jets(s_sample,ientry,jets);
       //eventdisplays_jetAK8s(s_sample,ientry,jetsAK8);
 
 
@@ -159,7 +159,8 @@ int main(int argc, char* argv[]){
 
     // defaults 
     std::string tree_name = "TreeMaker2/PreSelection";
-    std::string file_name = "root://cmseos.fnal.gov//store/user/kdipetri/SUEP/Production_v0.0/2018/merged_NTUP/SUEP_2018_mMed-750_mDark-2_temp-2_decay-darkPho_13TeV-pythia8_AnalysisTree.root";
+    //std::string file_name = "root://cmseos.fnal.gov//store/user/kdipetri/SUEP/Production_v0.0/2018/merged_NTUP/SUEP_2018_mMed-750_mDark-2_temp-2_decay-darkPho_13TeV-pythia8_AnalysisTree.root";
+    std::string file_name = "root://cmseos.fnal.gov//eos/uscms/store/user/kdipetri/SUEP/Production_v0.1/2018/NTUP/PrivateSamples.SUEP_2018_mMed-125_mDark-2_temp-2_decay-generic_13TeV-pythia8_n-100_0_RA2AnalysisTree.root";
     std::string sample_name = "mMed-750_mDark-2_temp-2_decay-generic";
     std::string output_name = "mMed-750_mDark-2_temp-2_decay-generic";
 
@@ -168,7 +169,8 @@ int main(int argc, char* argv[]){
     if (argc > 1){
         sample_name = argv[1];
         output_name = argv[1];
-        file_name = Form("root://cmseos.fnal.gov//store/user/kdipetri/SUEP/Production_v0.0/2018/merged_NTUP/SUEP_2018_%s_13TeV-pythia8_AnalysisTree.root",sample_name.c_str());
+//        file_name = Form("root://cmseos.fnal.gov//store/user/kdipetri/SUEP/Production_v0.0/2018/merged_NTUP/SUEP_2018_%s_13TeV-pythia8_AnalysisTree.root",sample_name.c_str());
+        file_name = Form("root://cmseos.fnal.gov//eos/uscms/store/user/kdipetri/SUEP/Production_v0.1/2018/NTUP/PrivateSamples.SUEP_2018_%s_13TeV-pythia8_n-100_0_RA2AnalysisTree.root",sample_name.c_str());
     }
 
     std::cout << "Starting SUEP Studies!" << std::endl;

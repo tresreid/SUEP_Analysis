@@ -162,8 +162,8 @@ def compareMass(temp,mDark,decay,dist):
 
 def compareDecay(mMed,temp,mDark,dist):
     decays = []
-    decays.append("darkPho")
-    decays.append("darkPhoHad")
+#    decays.append("darkPho")
+#    decays.append("darkPhoHad")
     decays.append("generic")
 
     hists = []
