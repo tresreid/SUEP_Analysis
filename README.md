@@ -21,7 +21,7 @@ cmsenv
 
 # Histogram Making Step
 * A C++ event loop is used to make histograms
-* There are helper scripts to make histograms, pack structures for physics objects, etc 
+* There are helper scripts to make histograms, pack structures for physics objects, etc
 * FastJet is included to make fatjets from tracks in Root/jetStudies.C
 * The event loop lives in Root/doHistos.C
 ```
@@ -37,8 +37,8 @@ python util/make_displays.py
 ```
 
 # Tips
-* directories output, plots are used to store output histograms and output plots
-* Double check location of rootfiles 
+* Be sure to make output, plot directories to store output histograms and output plots
+* Double check location of rootfiles
 
 # Signal n-tuples live here
 ```
@@ -50,4 +50,3 @@ eosls /store/user/kdipetri/SUEP/Production_v0.0/2018/merged_NTUP
 - scalar pdgId = 25
 - dark meson pdgId = 999999
 - dark photon pdgId = 999998
-

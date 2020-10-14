@@ -12,9 +12,12 @@
 #include <TChain.h>
 #include <TFile.h>
 #include <TLorentzVector.h>
-#include "Math/GenVector/Cartesian3D.h" 
-#include "Math/GenVector/PositionVector3D.h" 
-#include "Math/GenVector/DisplacementVector3D.h" 
+#include <TMatrixDSym.h>
+#include <TMatrixD.h>
+#include <TVectorD.h>
+#include "Math/GenVector/Cartesian3D.h"
+#include "Math/GenVector/PositionVector3D.h"
+#include "Math/GenVector/DisplacementVector3D.h"
 #include "SUEP_Analysis/PlotHelper.h"
 #include "SUEP_Analysis/PhysicsObjects.h"
 
@@ -23,6 +26,16 @@
 
 PlotHelper plotter("");//set up the plotter
 TCanvas *c1 = new TCanvas("c1","c1",800,800);
+
+TLorentzVector scalar;
+int npfs=0;
+int npfs_09=0;
+int npfs_08=0;
+int npfs_07=0;
+int npfs_2=0;
+int njets=0;
+float ht=0;
+float lead_jet_pt=0;
 
 class doHistos {
 public :
@@ -467,7 +480,7 @@ public :
 #endif
 
 #ifdef doHistos_cxx
-doHistos::doHistos(TTree *tree, bool isMC) : fChain(0) 
+doHistos::doHistos(TTree *tree, bool isMC) : fChain(0)
 {
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.

@@ -11,7 +11,7 @@ void makeJets(std::string sample_name, Long64_t ievent, std::vector<Track> track
 	for (auto track : tracks){
 		particles.push_back( PseudoJet( track.p4.Px(), track.p4.Py(), track.p4.Pz(), track.p4.E()) );
 	}
-	
+
 	// choose a jet definition
 	int cone = R*10;
 	JetDefinition jet_def(antikt_algorithm, R);
@@ -27,9 +27,9 @@ void makeJets(std::string sample_name, Long64_t ievent, std::vector<Track> track
 	int njets=0;
 	for (unsigned i = 0; i < jets.size(); i++) {
 
-		// basic cleaning cuts 
+		// basic cleaning cuts
 		if ( jets[i].pt() < 30 ) continue; // need some min jet cut
-		// some min # tracks cut ? > 1 
+		// some min # tracks cut ? > 1
 
 		njets+=1;
 
@@ -52,11 +52,5 @@ void makeJets(std::string sample_name, Long64_t ievent, std::vector<Track> track
 
 	}
 	plotter.Plot1D(Form( "%s_jetsAK%i_njets", sample_name.c_str(),cone),";njets", njets, 20, -0.5, 19.5 );
-
-
-
-	
-
-
 
 }

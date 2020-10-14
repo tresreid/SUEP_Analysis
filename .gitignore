@@ -7,3 +7,67 @@
 *.eps
 *.pdf
 *.pyc
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# Mac OS specific files
+.DS_Store
+*.cachefile
+*.icloud
+
+# Log files
+*.stderr
+*.stdout
+*.log
+*.txt
+docker_stderror
+
+# Tar files
+*.tar
+*.tgz
+*.tar.gz
+
+# ROOT files
+*.root
+
+# Python files
+*.pyc
+
+# Project related files
+*.pdf
+*.png
+*.eps
+doHistos
+fastjet-install/
+plots/
+output/
