@@ -6,7 +6,7 @@
 #include "Root/eventDisplays.C"
 #include "Root/eventShapes.C"
 #include "Root/kinematics.C"
-#include "Root/isrTagger.C"
+//#include "Root/isrTagger.C"
 #include <TH2.h>
 #include <TStyle.h>
 #include <TCanvas.h>
@@ -217,7 +217,7 @@ int main(int argc, char* argv[]){
     analysis.Loop(sample_name,isMC);
 
     // Save histograms here
-    TFile *output_file = TFile::Open(Form("root://cmseos.fnal.gov//store/user/chpapage/SUEPs/%s.root",output_name.c_str()),"RECREATE");
+    TFile *output_file = TFile::Open(Form("root://cmseos.fnal.gov//store/user/mreid/SUEPs/%s.root",output_name.c_str()),"RECREATE");
     c1->SetTickx(true);
     c1->SetTicky(true);
     plotter.DrawAll1D(c1);
