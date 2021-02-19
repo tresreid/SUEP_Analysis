@@ -12,11 +12,12 @@ jets_1000 = []
 jets_400 = []
 jets_qcd = []
 for qcd in [0,1,2]:
-  xsecs = [1559000,311900,29070,5962,1207,119.9,25.24] # signal xsec are (125,34.8), (400,5.9), (750,0.5), (1000,0.17)
-  files = [200,300,500,700,1000,1500,2000]
+  xsecs = [311900,29070,5962,1207,119.9,25.24] # signal xsec are (125,34.8), (400,5.9), (750,0.5), (1000,0.17)
+  files = [300,500,700,1000,1500,2000]
   if qcd == 1:
     for xsec,f in  zip(xsecs,files):
-      fname = "data/qcd%s_comparisonsx.txt"%f
+      #fname = "data/qcd%s_comparisonsx.txt"%f
+      fname = "../macros/data/qcd_%s_v0.txt"%f
       try:
         firstfile = open(fname)
       except IOError:
@@ -28,32 +29,35 @@ for qcd in [0,1,2]:
       for line in firstfile.readlines():
         events += xsec
         cols = line.rstrip().split(' ')
-        jets_qcd.append({"Event":int(cols[0]), "Jet_algo": cols[1], "R":float(cols[2]), "pt":float(cols[3]), "pt_m":float(cols[4]), "nTracks":int(cols[5]), "nTracks_m":int(cols[6]), "girth":float(cols[7]), "girth_m":float(cols[8]),"mass":float(cols[9]),"mass_m":float(cols[10]),"xsec":xsec*lumi/100000,"trackpt":float(cols[11]),"trackpt_m":float(cols[12]),"suep_tracks":int(0), "isr_tracks":int(0), "suep_tracks_m":int(0), "isr_tracks_m":int(0), "total_suep":int(1), "total_isr":int(0)}) 
+        #jets_qcd.append({"Event":int(cols[0]), "Jet_algo": cols[1], "R":float(cols[2]), "pt":float(cols[3]), "pt_m":float(cols[4]), "nTracks":int(cols[5]), "nTracks_m":int(cols[6]), "girth":float(cols[7]), "girth_m":float(cols[8]),"mass":float(cols[9]),"mass_m":float(cols[10]),"xsec":xsec*lumi/100000,"trackpt":float(cols[11]),"trackpt_m":float(cols[12]),"suep_tracks":int(0), "isr_tracks":int(0), "suep_tracks_m":int(0), "isr_tracks_m":int(0), "total_suep":int(1), "total_isr":int(0)}) 
+      jets_qcd.append({"Event":int(cols[0]), "Jet_algo": int(cols[1]), "R":float(cols[2]),"jet_id":int(cols[3]), "pt":float(cols[4]), "eta":float(cols[5]), "phi":float(cols[6]), "nTracks":int(cols[7]), "girth":float(cols[8]), "mass":float(cols[9]),"xsec":xsec*lumi/10000,"trackpt":float(cols[10]),"suep_tracks":int(cols[11]), "isr_tracks":int(cols[12]), "total_suep":int(cols[13]), "total_isr":int(cols[14]),"NVtx":int(cols[15]),"Num_Interactions":int(cols[16])}) 
       print("QCD %d Events: %d"%(f,events))
       print(len(jets_qcd))
   elif qcd == 2:
-    firstfile = open('data/signal400_comparisons_allv2.txt')
-    #firstfile = open('data/signal400_comparisons.txt')
+    #firstfile = open('data/signal400_comparisons_allv2.txt')
+    firstfile = open('../macros/data/sig_400_v0.txt')
     qcd_tit = "Sig400"
     next(firstfile)
     events = 0
+    xsec = 5.9
     for line in firstfile.readlines():
       events += 1
       cols = line.rstrip().split(' ')
-      jets_400.append({"Event":int(cols[0]), "Jet_algo": cols[1], "R":float(cols[2]),"jet_id":int(cols[3]), "pt":float(cols[4]), "nTracks":int(cols[5]), "girth":float(cols[6]), "mass":float(cols[7]),"xsec":5.9*lumi/10000,"trackpt":float(cols[8]),"suep_tracks":int(cols[9]), "isr_tracks":int(cols[10]), "total_suep":int(cols[11]), "total_isr":int(cols[12]),"NVtx":int(cols[13]),"Num_Interactions":int(cols[14])}) 
-      #jets_400.append({"Event":int(cols[0]), "Jet_algo": cols[1], "R":float(cols[2]), "pt_l":float(cols[3]), "pt_m":float(cols[4]), "nTracks_l":int(cols[5]), "nTracks_m":int(cols[6]), "girth_l":float(cols[7]), "girth_m":float(cols[8]),"mass_l":float(cols[9]),"mass_m":float(cols[10]),"xsec":5.9*lumi/10000,"trackpt_l":float(cols[11]),"trackpt_m":float(cols[12]),"suep_tracks_l":int(cols[13]), "isr_tracks_l":int(cols[14]), "suep_tracks_m":int(cols[15]), "isr_tracks_m":int(cols[16]), "total_suep":int(cols[17]), "total_isr":int(cols[18])}) 
+      #jets_400.append({"Event":int(cols[0]), "Jet_algo": cols[1], "R":float(cols[2]),"jet_id":int(cols[3]), "pt":float(cols[4]), "nTracks":int(cols[5]), "girth":float(cols[6]), "mass":float(cols[7]),"xsec":5.9*lumi/10000,"trackpt":float(cols[8]),"suep_tracks":int(cols[9]), "isr_tracks":int(cols[10]), "total_suep":int(cols[11]), "total_isr":int(cols[12]),"NVtx":int(cols[13]),"Num_Interactions":int(cols[14])}) 
+      jets_400.append({"Event":int(cols[0]), "Jet_algo": int(cols[1]), "R":float(cols[2]),"jet_id":int(cols[3]), "pt":float(cols[4]), "eta":float(cols[5]), "phi":float(cols[6]), "nTracks":int(cols[7]), "girth":float(cols[8]), "mass":float(cols[9]),"xsec":xsec*lumi/10000,"trackpt":float(cols[10]),"suep_tracks":int(cols[11]), "isr_tracks":int(cols[12]), "total_suep":int(cols[13]), "total_isr":int(cols[14]),"NVtx":int(cols[15]),"Num_Interactions":int(cols[16])}) 
     print("Signal 400 Events: %d"%(events))
   elif qcd == 0:
-    firstfile = open('data/signal1000_comparisons_allv2.txt')
+    #firstfile = open('data/signal1000_comparisons_allv2.txt')
+    firstfile = open('../macros/data/sig_1000_v0.txt')
     #firstfile = open('data/signal1000_comparisons.txt')
     qcd_tit = "Sig"
     next(firstfile)
     events = 0
+    xsec = 0.17
     for line in firstfile.readlines():
       events += 1
       cols = line.rstrip().split(' ')
-      jets_1000.append({"Event":int(cols[0]), "Jet_algo": cols[1], "R":float(cols[2]),"jet_id":int(cols[3]), "pt":float(cols[4]), "nTracks":int(cols[5]), "girth":float(cols[6]), "mass":float(cols[7]),"xsec":5.9*lumi/10000,"trackpt":float(cols[8]),"suep_tracks":int(cols[9]), "isr_tracks":int(cols[10]), "total_suep":int(cols[11]), "total_isr":int(cols[12]),"NVtx":int(cols[13]),"Num_Interactions":int(cols[14])}) 
-      #jets_1000.append({"Event":int(cols[0]), "Jet_algo": cols[1], "R":float(cols[2]), "pt_l":float(cols[3]), "pt_m":float(cols[4]), "nTracks_l":int(cols[5]), "nTracks_m":int(cols[6]), "girth_l":float(cols[7]), "girth_m":float(cols[8]),"mass_l":float(cols[9]),"mass_m":float(cols[10]),"xsec":0.17*lumi/10000,"trackpt_l":float(cols[11]),"trackpt_m":float(cols[12]),"suep_tracks_l":int(cols[13]), "isr_tracks_l":int(cols[14]), "suep_tracks_m":int(cols[15]), "isr_tracks_m":int(cols[16]), "total_suep":int(cols[17]), "total_isr":int(cols[18])}) 
+      jets_1000.append({"Event":int(cols[0]), "Jet_algo": int(cols[1]), "R":float(cols[2]),"jet_id":int(cols[3]), "pt":float(cols[4]), "eta":float(cols[5]), "phi":float(cols[6]), "nTracks":int(cols[7]), "girth":float(cols[8]), "mass":float(cols[9]),"xsec":xsec*lumi/10000,"trackpt":float(cols[10]),"suep_tracks":int(cols[11]), "isr_tracks":int(cols[12]), "total_suep":int(cols[13]), "total_isr":int(cols[14]),"NVtx":int(cols[15]),"Num_Interactions":int(cols[16])}) 
     print("Signal Events: %d"%(events))
   
 df_jets1000 = pd.DataFrame(jets_1000)
@@ -73,7 +77,7 @@ df_jets400["is_suep"] = df_jets400["suep_purity"].apply(lambda x: 1 if x > 0.8 e
 df_jetsqcd["suep_frac"] = 0
 df_jetsqcd["suep_purity"] = 0
 df_jetsqcd["is_suep"] = 0
-
+#print(df_jets1000)
 def get_sig(algo,R,var,steps):
   jet1_df = df_jets1000[(df_jets1000["Jet_algo"] == algo) & (df_jets1000["R"] == R) & (df_jets1000["is_suep"] == 1)]
   jet2_df = df_jets400[(df_jets400["Jet_algo"] == algo) & (df_jets400["R"] == R) & (df_jets400["is_suep"] == 1)]
@@ -121,7 +125,8 @@ def get_bkg(algo,R,var,steps):
   return(qcd,isr1,isr2,bkg1,bkg2,tot_qcd,tot_isr1,tot_isr2,tot_bkg1,tot_bkg2)
 def make_all_sig(var,steps):
   algo_set = []
-  for algo in ["AKT","KT","CA"]:
+  #for algo in ["AKT","KT","CA"]:
+  for algo in [-1,0,1]:
     R_set = []
     for R in [0.8,1.0,1.5,2.0]:
       R_set.append(get_sig(algo,R,var,steps))
@@ -129,7 +134,8 @@ def make_all_sig(var,steps):
   return algo_set
 def make_all_bkg(var,steps):
   algo_set = []
-  for algo in ["AKT","KT","CA"]:
+  #for algo in ["AKT","KT","CA"]:
+  for algo in [-1,0,1]:
     R_set = []
     for R in [0.8,1.0,1.5,2.0]:
       R_set.append(get_bkg(algo,R,var,steps))
@@ -139,7 +145,8 @@ def make_all_bkg(var,steps):
 def make_eff_algo_roc(var,steps,xtitle):
   sig_set = make_all_sig(var,steps)
   bkg_set = make_all_bkg(var,steps)
-  algs = ["AKT","KT","CA"]
+  alg_name = ["AKT","KT","CA"]
+  #algs = [-1,0,1]
   Rs = [0.8,1.0,1.5,2.0]
   sigs = ["Sig1000","Sig400"]
   bkgs = ["qcd","isr","bkg"]
@@ -153,7 +160,7 @@ def make_eff_algo_roc(var,steps,xtitle):
         if bkg == 2:
           bkg_x=3+sig
         fig, (ax1,ax2) = plt.subplots(1,2)
-        fig.suptitle("%s %s %s: %s"%(sigs[sig],bkgs[bkg],algs[i],var))
+        fig.suptitle("%s %s %s: %s"%(sigs[sig],bkgs[bkg],alg_name[i],var))
         ax1.set_xlabel(xtitle)
         ax1.set_ylabel("S/sqrt(S+B)")
 
@@ -179,7 +186,7 @@ def make_eff_algo_roc(var,steps,xtitle):
         ax2.legend(loc="upper right")
         fig.tight_layout()
         Path("Plots/ROC/bkg_%s/%s"%(bkgs[bkg],var)).mkdir(parents=True,exist_ok=True)
-        fig.savefig("Plots/ROC/bkg_%s/%s/%s_%s.png"%(bkgs[bkg],var,sigs[sig],algs[i]))
+        fig.savefig("Plots/ROC/bkg_%s/%s/%s_%s.png"%(bkgs[bkg],var,sigs[sig],alg_name[i]))
         plt.close()
 
       for i in [0,1,2,3]:
@@ -211,7 +218,8 @@ def make_eff_algo_roc(var,steps,xtitle):
 def make_eff_algo_combo(var,steps,xtitle):
   sig_set = make_all_sig(var,steps)
   bkg_set = make_all_bkg(var,steps)
-  algs = ["AKT","KT","CA"]
+  alg_name = ["AKT","KT","CA"]
+  algs = [-1,0,1]
   Rs = [0.8,1.0,1.5,2.0]
   sigs = ["Sig1000","Sig400"]
   bkgs = ["qcd","isr","bkg"]
@@ -236,7 +244,7 @@ def make_eff_algo_combo(var,steps,xtitle):
             bkg_x=3+sig
 
           fig, (ax1,ax2) = plt.subplots(1,2)
-          fig.suptitle("%s %s %s %s: %s"%(sigs[sig],bkgs[bkg],algs[i],Rs[r],var))
+          fig.suptitle("%s %s %s %s: %s"%(sigs[sig],bkgs[bkg],alg_name[i],Rs[r],var))
           ax1.set_xlabel(xtitle)
           ax1.set_ylabel("S/sqrt(S+B)")
 
@@ -260,12 +268,13 @@ def make_eff_algo_combo(var,steps,xtitle):
           ax2.legend(loc="upper right")
           fig.tight_layout()
           Path("Plots/COMBO/bkg_%s/%s"%(bkgs[bkg],var)).mkdir(parents=True,exist_ok=True)
-          fig.savefig("Plots/COMBO/bkg_%s/%s/%s_%s_%s.png"%(bkgs[bkg],var,sigs[sig],algs[i],Rs[r]))
+          fig.savefig("Plots/COMBO/bkg_%s/%s/%s_%s_%s.png"%(bkgs[bkg],var,sigs[sig],alg_name[i],Rs[r]))
           plt.close()
 
 def make_eff_algo_dist(var,steps,xtitle):
   #algo_set = make_all(var,steps)
-  algs = ["AKT","KT","CA"]
+  alg_name = ["AKT","KT","CA"]
+  algs = [-1,0,1]
   Rs = [0.8,1.0,1.5,2.0]
   sigs = ["Sig1000","Sig400","qcd","isr1000","isr400","bkg1000","bkg400"]
   for sig in [0,1,2,3,4,5,6]:
@@ -321,7 +330,7 @@ def make_eff_algo_dist(var,steps,xtitle):
           jet1_df_4 = df_jetsqcd[(df_jetsqcd["Jet_algo"] == algs[i]) & (df_jetsqcd["R"] == Rs[3])].append(df_jets400[(df_jets400["Jet_algo"] == algs[i]) & (df_jets400["R"] == Rs[3]) & (df_jets400["is_suep"] == 0)])
 
         fig, (ax1,ax2) = plt.subplots(1,2)
-        fig.suptitle("%s %s: %s"%(sigs[sig],algs[i],var))
+        fig.suptitle("%s %s: %s"%(sigs[sig],alg_name[i],var))
         ax1.set_xlabel(xtitle)
         plt.yscale('log')
         ax1.set_ylabel('Events')
@@ -339,7 +348,7 @@ def make_eff_algo_dist(var,steps,xtitle):
         ax2.legend(loc="upper right")
         fig.tight_layout()
         Path("Plots/DIST/%s"%(var)).mkdir(parents=True,exist_ok=True)
-        fig.savefig("Plots/DIST/%s/%s_%s.png"%(var,sigs[sig],algs[i]))
+        fig.savefig("Plots/DIST/%s/%s_%s.png"%(var,sigs[sig],alg_name[i]))
         plt.close()
     for i in [0,1,2,3]:
         if sig == 0:
@@ -403,7 +412,8 @@ def make_eff_algo_dist(var,steps,xtitle):
 
 def make_eff_algo_dist_2d(var1,steps1,xtitle1,var2,steps2,xtitle2):
   #algo_set = make_all(var2,steps2)
-  algs = ["AKT","KT","CA"]
+  alg_name = ["AKT","KT","CA"]
+  algs = [-1,0,1]
   Rs = [0.8,1.0,1.5,2.0]
   sigs = ["Sig1000","Sig400"]
   for sig in [0,1]:
@@ -433,7 +443,7 @@ def make_eff_algo_dist_2d(var1,steps1,xtitle1,var2,steps2,xtitle2):
             Z[yi,xi] = func(x,y)
         fig, (ax1,ax2) = plt.subplots(1,2)
         fig.set_size_inches(12.8,7.2)
-        fig.suptitle("%s %s %s: %s vs %s"%(sigs[sig],algs[i],Rs[r],var1,var2))
+        fig.suptitle("%s %s %s: %s vs %s"%(sigs[sig],alg_name[i],Rs[r],var1,var2))
         c = ax1.pcolormesh(Xm,Ym,Z,cmap="RdBu",shading="flat")
         fig.colorbar(c,ax=ax1) 
         ax1.set_xlabel(xtitle1)
@@ -445,21 +455,21 @@ def make_eff_algo_dist_2d(var1,steps1,xtitle1,var2,steps2,xtitle2):
         ax2.set_xlabel(xtitle1)
         ax2.set_ylabel(xtitle2)
         Path("Plots/DIST2d/%s_%s"%(var1,var2)).mkdir(parents=True,exist_ok=True)
-        fig.savefig("Plots/DIST2d/%s_%s/%s_%s_%s.png"%(var1,var2,sigs[sig],algs[i],Rs[r]))
+        fig.savefig("Plots/DIST2d/%s_%s/%s_%s_%s.png"%(var1,var2,sigs[sig],alg_name[i],Rs[r]))
         plt.close()
 
-print("Starting combo")
-make_eff_algo_combo("nTracks",range(0,500,1),"nTracks")
-make_eff_algo_combo("pt",range(0,1000,10),"Pt [GeV]")
-make_eff_algo_combo("trackpt",[0.005 * x for x in range(0,20,1)],"<track Pt/ jet pt>")
-make_eff_algo_combo("mass",range(0,1000,1),"Mass [GeV")
-make_eff_algo_combo("girth",[0.01 *x for x in range(0,200,1)],"$1/Pt \Sigma_{i} (Pt_{i} * \Delta R_{i,jet})$")
-print("Starting roc")
-make_eff_algo_roc("nTracks",range(0,500,1),"nTracks")
-make_eff_algo_roc("pt",range(0,1000,10),"Pt [GeV]")
-make_eff_algo_roc("trackpt",[0.005 * x for x in range(0,20,1)],"<track Pt/ jet pt>")
-make_eff_algo_roc("mass",range(0,1000,1),"Mass [GeV")
-make_eff_algo_roc("girth",[0.01 *x for x in range(0,200,1)],"$1/Pt \Sigma_{i} (Pt_{i} * \Delta R_{i,jet})$")
+#print("Starting combo")
+#make_eff_algo_combo("nTracks",range(0,500,1),"nTracks")
+#make_eff_algo_combo("pt",range(0,1000,10),"Pt [GeV]")
+#make_eff_algo_combo("trackpt",[0.005 * x for x in range(0,20,1)],"<track Pt/ jet pt>")
+#make_eff_algo_combo("mass",range(0,1000,1),"Mass [GeV")
+#make_eff_algo_combo("girth",[0.01 *x for x in range(0,200,1)],"$1/Pt \Sigma_{i} (Pt_{i} * \Delta R_{i,jet})$")
+#print("Starting roc")
+#make_eff_algo_roc("nTracks",range(0,500,1),"nTracks")
+#make_eff_algo_roc("pt",range(0,1000,10),"Pt [GeV]")
+#make_eff_algo_roc("trackpt",[0.005 * x for x in range(0,20,1)],"<track Pt/ jet pt>")
+#make_eff_algo_roc("mass",range(0,1000,1),"Mass [GeV")
+#make_eff_algo_roc("girth",[0.01 *x for x in range(0,200,1)],"$1/Pt \Sigma_{i} (Pt_{i} * \Delta R_{i,jet})$")
 print("Starting dist")
 make_eff_algo_dist("nTracks",range(0,500,1),"nTracks")
 make_eff_algo_dist("pt",range(0,1000,10),"Pt [GeV]")
@@ -470,32 +480,32 @@ make_eff_algo_dist("suep_purity",[0.01*x for x in range(0,100,2)],"purity")
 make_eff_algo_dist("suep_frac",[0.01*x for x in range(0,100,2)],"Suep Fraction")
 make_eff_algo_dist("NVtx",range(0,100,1),"NVtx")
 make_eff_algo_dist("Num_Interactions",range(0,100,1),"Num Interactions")
-print("starting purity 2d plots")
-make_eff_algo_dist_2d("suep_purity",[0.01*x for x in range(0,100,2)],"purity","nTracks",range(0,500,25),"nTracks")
-make_eff_algo_dist_2d("suep_purity",[0.01*x for x in range(0,100,2)],"purity","pt",range(0,1000,50),"Pt [GeV]")
-make_eff_algo_dist_2d("suep_purity",[0.01*x for x in range(0,100,2)],"purity","trackpt",[0.005 * x for x in range(0,20,1)],"<track Pt/ jet pt>")
-make_eff_algo_dist_2d("suep_purity",[0.01*x for x in range(0,100,2)],"purity","mass",range(0,1000,50),"Mass [GeV]")
-make_eff_algo_dist_2d("suep_purity",[0.01*x for x in range(0,100,2)],"purity","girth",[0.01 *x for x in range(0,200,20)],"$1/Pt \Sigma_{i} (Pt_{i} * \Delta R_{i,jet})$")
-make_eff_algo_dist_2d("suep_purity",[0.01*x for x in range(0,100,2)],"purity","NVtx",range(0,100,1),"NVtx")
-make_eff_algo_dist_2d("suep_purity",[0.01*x for x in range(0,100,2)],"purity","Num_Interactions",range(0,100,1),"Num Interactions")
-print("starting frac 2d plots")
-make_eff_algo_dist_2d("suep_frac",[0.01*x for x in range(0,100,2)],"Suep Fraction","nTracks",range(0,500,25),"nTracks")
-make_eff_algo_dist_2d("suep_frac",[0.01*x for x in range(0,100,2)],"Suep Fraction","pt",range(0,1000,50),"Pt [GeV]")
-make_eff_algo_dist_2d("suep_frac",[0.01*x for x in range(0,100,2)],"Suep Fraction","trackpt",[0.005 * x for x in range(0,20,1)],"<track Pt/ jet pt>")
-make_eff_algo_dist_2d("suep_frac",[0.01*x for x in range(0,100,2)],"Suep Fraction","mass",range(0,1000,50),"Mass [GeV]")
-make_eff_algo_dist_2d("suep_frac",[0.01*x for x in range(0,100,2)],"Suep Fraction","girth",[0.01 *x for x in range(0,200,20)],"$1/Pt \Sigma_{i} (Pt_{i} * \Delta R_{i,jet})$")
-make_eff_algo_dist_2d("suep_frac",[0.01*x for x in range(0,100,2)],"Suep Fraction","NVtx",range(0,100,1),"NVtx")
-make_eff_algo_dist_2d("suep_frac",[0.01*x for x in range(0,100,2)],"Suep Fraction","Num_Interactions",range(0,100,1),"Num Interactions")
-print("starting nvtx 2d plots")
-make_eff_algo_dist_2d("NVtx",range(0,100,1),"NVtx","nTracks",range(0,500,25),"nTracks")
-make_eff_algo_dist_2d("NVtx",range(0,100,1),"NVtx","pt",range(0,1000,50),"Pt [GeV]")
-make_eff_algo_dist_2d("NVtx",range(0,100,1),"NVtx","trackpt",[0.005 * x for x in range(0,20,1)],"<track Pt/ jet pt>")
-make_eff_algo_dist_2d("NVtx",range(0,100,1),"NVtx","mass",range(0,1000,50),"Mass [GeV]")
-make_eff_algo_dist_2d("NVtx",range(0,100,1),"NVtx","girth",[0.01 *x for x in range(0,200,20)],"$1/Pt \Sigma_{i} (Pt_{i} * \Delta R_{i,jet})$")
-print("starting num interactions 2d plots")
-make_eff_algo_dist_2d("Num_Interactions",range(0,100,1),"Num Interactions","nTracks",range(0,500,25),"nTracks")
-make_eff_algo_dist_2d("Num_Interactions",range(0,100,1),"Num Interactions","pt",range(0,1000,50),"Pt [GeV]")
-make_eff_algo_dist_2d("Num_Interactions",range(0,100,1),"Num Interactions","trackpt",[0.005 * x for x in range(0,20,1)],"<track Pt/ jet pt>")
-make_eff_algo_dist_2d("Num_Interactions",range(0,100,1),"Num Interactions","mass",range(0,1000,50),"Mass [GeV]")
-make_eff_algo_dist_2d("Num_Interactions",range(0,100,1),"Num Interactions","girth",[0.01 *x for x in range(0,200,20)],"$1/Pt \Sigma_{i} (Pt_{i} * \Delta R_{i,jet})$")
-
+#print("starting purity 2d plots")
+#make_eff_algo_dist_2d("suep_purity",[0.01*x for x in range(0,100,2)],"purity","nTracks",range(0,500,25),"nTracks")
+#make_eff_algo_dist_2d("suep_purity",[0.01*x for x in range(0,100,2)],"purity","pt",range(0,1000,50),"Pt [GeV]")
+#make_eff_algo_dist_2d("suep_purity",[0.01*x for x in range(0,100,2)],"purity","trackpt",[0.005 * x for x in range(0,20,1)],"<track Pt/ jet pt>")
+#make_eff_algo_dist_2d("suep_purity",[0.01*x for x in range(0,100,2)],"purity","mass",range(0,1000,50),"Mass [GeV]")
+#make_eff_algo_dist_2d("suep_purity",[0.01*x for x in range(0,100,2)],"purity","girth",[0.01 *x for x in range(0,200,20)],"$1/Pt \Sigma_{i} (Pt_{i} * \Delta R_{i,jet})$")
+#make_eff_algo_dist_2d("suep_purity",[0.01*x for x in range(0,100,2)],"purity","NVtx",range(0,100,1),"NVtx")
+#make_eff_algo_dist_2d("suep_purity",[0.01*x for x in range(0,100,2)],"purity","Num_Interactions",range(0,100,1),"Num Interactions")
+#print("starting frac 2d plots")
+#make_eff_algo_dist_2d("suep_frac",[0.01*x for x in range(0,100,2)],"Suep Fraction","nTracks",range(0,500,25),"nTracks")
+#make_eff_algo_dist_2d("suep_frac",[0.01*x for x in range(0,100,2)],"Suep Fraction","pt",range(0,1000,50),"Pt [GeV]")
+#make_eff_algo_dist_2d("suep_frac",[0.01*x for x in range(0,100,2)],"Suep Fraction","trackpt",[0.005 * x for x in range(0,20,1)],"<track Pt/ jet pt>")
+#make_eff_algo_dist_2d("suep_frac",[0.01*x for x in range(0,100,2)],"Suep Fraction","mass",range(0,1000,50),"Mass [GeV]")
+#make_eff_algo_dist_2d("suep_frac",[0.01*x for x in range(0,100,2)],"Suep Fraction","girth",[0.01 *x for x in range(0,200,20)],"$1/Pt \Sigma_{i} (Pt_{i} * \Delta R_{i,jet})$")
+#make_eff_algo_dist_2d("suep_frac",[0.01*x for x in range(0,100,2)],"Suep Fraction","NVtx",range(0,100,1),"NVtx")
+#make_eff_algo_dist_2d("suep_frac",[0.01*x for x in range(0,100,2)],"Suep Fraction","Num_Interactions",range(0,100,1),"Num Interactions")
+#print("starting nvtx 2d plots")
+#make_eff_algo_dist_2d("NVtx",range(0,100,1),"NVtx","nTracks",range(0,500,25),"nTracks")
+#make_eff_algo_dist_2d("NVtx",range(0,100,1),"NVtx","pt",range(0,1000,50),"Pt [GeV]")
+#make_eff_algo_dist_2d("NVtx",range(0,100,1),"NVtx","trackpt",[0.005 * x for x in range(0,20,1)],"<track Pt/ jet pt>")
+#make_eff_algo_dist_2d("NVtx",range(0,100,1),"NVtx","mass",range(0,1000,50),"Mass [GeV]")
+#make_eff_algo_dist_2d("NVtx",range(0,100,1),"NVtx","girth",[0.01 *x for x in range(0,200,20)],"$1/Pt \Sigma_{i} (Pt_{i} * \Delta R_{i,jet})$")
+#print("starting num interactions 2d plots")
+#make_eff_algo_dist_2d("Num_Interactions",range(0,100,1),"Num Interactions","nTracks",range(0,500,25),"nTracks")
+#make_eff_algo_dist_2d("Num_Interactions",range(0,100,1),"Num Interactions","pt",range(0,1000,50),"Pt [GeV]")
+#make_eff_algo_dist_2d("Num_Interactions",range(0,100,1),"Num Interactions","trackpt",[0.005 * x for x in range(0,20,1)],"<track Pt/ jet pt>")
+#make_eff_algo_dist_2d("Num_Interactions",range(0,100,1),"Num Interactions","mass",range(0,1000,50),"Mass [GeV]")
+#make_eff_algo_dist_2d("Num_Interactions",range(0,100,1),"Num Interactions","girth",[0.01 *x for x in range(0,200,20)],"$1/Pt \Sigma_{i} (Pt_{i} * \Delta R_{i,jet})$")
+#

@@ -18,7 +18,7 @@ done
 #outdir=/publicweb/m/mreid/SUEPs/ROC
 #outdir=/publicweb/m/mreid/SUEPs/DIST
 #outdir=/publicweb/m/mreid/SUEPs/DIST2d
-outdir=/publicweb/m/mreid/SUEPs/JetAlgoComparisons_all
+outdir=/publicweb/m/mreid/SUEPs/JetAlgoComparisons_all_cpp
 #outdir=/publicweb/m/mreid/SUEPs/testdir
 rm -r $outdir
 mkdir $outdir

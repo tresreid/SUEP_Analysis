@@ -1,11 +1,11 @@
 import uproot
 import uproot_methods
-import ROOT
-import coffea
+#import ROOT
+#import coffea
 import math
-from coffea import hist
+#from coffea import hist
 import numpy as np
-import seutils
+#import seutils
 from math import pi
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
@@ -15,9 +15,9 @@ from pyjet import cluster, DTYPE_PTEPM
 from pyjet.testdata import get_event
 from pathlib import Path
 import sys
-from joblib import Parallel,delayed
+#from joblib import Parallel,delayed
 
-ROOT.gSystem.Load('libGenVector')
+#ROOT.gSystem.Load('libGenVector')
 
 eta_min, eta_max = -4., 4.
 extent = [-np.pi, np.pi, eta_min, eta_max]
@@ -93,6 +93,7 @@ def jet_constituents(jet,scalars,isrs):
     return (scalar_part, isr_part)
 
 def makeJets(jet_algo,R, particles):
+  print(particles)
   cone = R*10
   eta = np.linspace(eta_min, eta_max, bins + 1)[:-1] + (eta_max - eta_min) / (2 * bins)
   phi = np.linspace(-np.pi, np.pi, bins + 1)[:-1] + (np.pi / bins)
@@ -101,17 +102,19 @@ def makeJets(jet_algo,R, particles):
   event['pT'] = [p.pt for p in particles]
   event['eta'] = [p.eta for p in particles]
   event['phi'] = [p.phi for p in particles]
-  ghosts = np.zeros(eta.shape[0] * phi.shape[0], dtype=DTYPE_PTEPM)
-  ghosts['pT'] = 1e-8
-  ghosts['eta'] = Y.ravel()
-  ghosts['phi'] = X.ravel()
+  event['mass'] = [p.mass for p in particles]
+  #ghosts = np.zeros(eta.shape[0] * phi.shape[0], dtype=DTYPE_PTEPM)
+  #ghosts['pT'] = 1e-8
+  #ghosts['eta'] = Y.ravel()
+  #ghosts['phi'] = X.ravel()
   
   # add ghosts to the event
-  event = np.concatenate([event, ghosts], axis=0)
+  #event = np.concatenate([event, ghosts], axis=0)
 
   # p = -1 (ak), 0 (CA), 1 (kt)
   sequence = cluster(event,R=R,p=jet_algo)
   jets = sequence.inclusive_jets(ptmin=30)
+  #jets = sequence.exclusive_jets(5)
   return jets
 
 # Get the file and import using uproot
@@ -221,7 +224,7 @@ def plot(ievt,outfile,outfile_all, ax=None, boost=False):#, reco=False, jet_algo
       genParticles_eta = GenParticles_eta[ievt]
       genParticles_phi = GenParticles_phi[ievt]
       genParticles_E = GenParticles_E[ievt]
-      genParticles = uproot_methods.TLorentzVectorArray.from_ptetaphie(genParticles_pt,
+      genParticles = uproot_methods.TLorentzVectorArray.from_ptetaphim(genParticles_pt,
                                                                        genParticles_eta,
                                                                        genParticles_phi,
                                                                        genParticles_E)
@@ -256,10 +259,6 @@ def plot(ievt,outfile,outfile_all, ax=None, boost=False):#, reco=False, jet_algo
       fromScalarParticles_hadron = genParticles[finalParticles &
                                                 fromScalarParticles &
                                                 (abs(genParticles_PdgId) > 100) & (abs(genParticles_PdgId) != 211)]
-#      fromScalarParticles_other = genParticles[finalParticles &
-#                                                fromScalarParticles &
-#                                                (abs(genParticles_PdgId) < 100) & (abs(genParticles_PdgId) != 11)& (abs(genParticles_PdgId) != 13)& (abs(genParticles_PdgId) !=22 )& (abs(genParticles_PdgId) != 211 )]
-#      print("other %d"%(len(fromScalarParticles_other)))
 
       isrParticles_e = genParticles[finalParticles & isrParticles &
                                     (abs(genParticles_PdgId) == 11)]
@@ -272,34 +271,9 @@ def plot(ievt,outfile,outfile_all, ax=None, boost=False):#, reco=False, jet_algo
       isrParticles_hadron = genParticles[finalParticles & isrParticles &
                                          (abs(genParticles_PdgId) > 100)& (abs(genParticles_PdgId) != 211)]
 
-      # Boost everything to scalar's rest frame
-      #if boost == True:
-      #    fromScalarParticles_e = fromScalarParticles_e.boost(-scalarParticle.p3/scalarParticle.energy)
-      #    fromScalarParticles_mu = fromScalarParticles_mu.boost(-scalarParticle.p3/scalarParticle.energy)
-      #    fromScalarParticles_gamma = fromScalarParticles_gamma.boost(-scalarParticle.p3/scalarParticle.energy)
-      #    fromScalarParticles_pi = fromScalarParticles_pi.boost(-scalarParticle.p3/scalarParticle.energy)
-      #    fromScalarParticles_hadron = fromScalarParticles_hadron.boost(-scalarParticle.p3/scalarParticle.energy)
-      #    isrParticles_e = isrParticles_e.boost(-scalarParticle.p3/scalarParticle.energy)
-      #    isrParticles_mu = isrParticles_mu.boost(-scalarParticle.p3/scalarParticle.energy)
-      #    isrParticles_gamma = isrParticles_gamma.boost(-scalarParticle.p3/scalarParticle.energy)
-      #    isrParticles_pi = isrParticles_pi.boost(-scalarParticle.p3/scalarParticle.energy)
-      #    isrParticles_hadron = isrParticles_hadron.boost(-scalarParticle.p3/scalarParticle.energy)
-      #    scalarParticle = scalarParticle.boost(-scalarParticle.p3/scalarParticle.energy)
-
-      #    reco_jets = reco_jets.boost(-scalarParticle.p3/scalarParticle.energy)
-
       particles = np.concatenate([fromScalarParticles_e,fromScalarParticles_mu,fromScalarParticles_gamma,fromScalarParticles_pi,fromScalarParticles_hadron ,isrParticles_e , isrParticles_mu , isrParticles_gamma , isrParticles_pi, isrParticles_hadron], axis=0)  
       isrs = np.concatenate([isrParticles_e , isrParticles_mu , isrParticles_gamma , isrParticles_pi, isrParticles_hadron], axis=0)  
       scalars = np.concatenate([fromScalarParticles_e ,fromScalarParticles_mu ,fromScalarParticles_gamma ,fromScalarParticles_pi ,fromScalarParticles_hadron], axis=0)
-      #truthScalar = uproot_methods.TLorentzVector(0,0,0,0)
-      #truth_trks = 0
-      #for scalar in scalars:#genParticles[finalParticles & fromScalarParticles]: #scalars:
-      ##for scalar in scalarParticle:
-      #  if scalar.pt < 1:
-      #    continue
-      #  if abs(scalar.eta) > 2.5:
-      #    continue
-      #  truth_trks = truth_trks+1
       #  truthScalar = truthScalar + scalar 
   
 
@@ -355,42 +329,12 @@ def plot(ievt,outfile,outfile_all, ax=None, boost=False):#, reco=False, jet_algo
         ax.scatter(tracks.phi, tracks.eta,
                    #s=scale(fromScalarParticles_e,scalarParticle),
                    c='xkcd:blue', marker='o')
-        #ax.scatter(fromScalarParticles_e.phi, fromScalarParticles_e.eta,
-        #           s=scale(fromScalarParticles_e,scalarParticle),
-        #           c='xkcd:blue', marker='o')
-        #ax.scatter(fromScalarParticles_mu.phi, fromScalarParticles_mu.eta,
-        #           s=scale(fromScalarParticles_mu,scalarParticle),
-        #           c='xkcd:blue', marker='v')
-        #ax.scatter(fromScalarParticles_gamma.phi, fromScalarParticles_gamma.eta,
-        #           s=scale(fromScalarParticles_gamma,scalarParticle),
-        #           c='xkcd:blue', marker='s')
-        #ax.scatter(fromScalarParticles_pi.phi, fromScalarParticles_pi.eta,
-        #           s=scale(fromScalarParticles_pi,scalarParticle),
-        #           c='xkcd:blue', marker='P')
-        #ax.scatter(fromScalarParticles_hadron.phi, fromScalarParticles_hadron.eta,
-        #           s=scale(fromScalarParticles_hadron,scalarParticle),
-        #           c='xkcd:blue', marker='*')
-        #ax.scatter(isrParticles_e.phi, isrParticles_e.eta,
-        #           s=scale(isrParticles_e,scalarParticle),
-        #           c='xkcd:magenta', marker='o')
-        #ax.scatter(isrParticles_mu.phi, isrParticles_mu.eta,
-        #           s=scale(isrParticles_mu,scalarParticle),
-        #           c='xkcd:magenta', marker='v')
-        #ax.scatter(isrParticles_gamma.phi, isrParticles_gamma.eta,
-        #           s=scale(isrParticles_gamma,scalarParticle),
-        #           c='xkcd:magenta', marker='s')
-        #ax.scatter(isrParticles_pi.phi, isrParticles_pi.eta,
-        #           s=scale(isrParticles_pi,scalarParticle),
-        #           c='xkcd:magenta', marker='P')
-        #ax.scatter(isrParticles_hadron.phi, isrParticles_hadron.eta,
-        #           s=scale(isrParticles_hadron,scalarParticle),
-        #           c='xkcd:magenta', marker='*')
-
-        # Add the scalar mediator to the plot
-        #ax.scatter(scalarParticle.phi, scalarParticle.eta,
-        #     s=1.*scale(scalarParticle,scalarParticle), facecolors='none',
-        #     edgecolors='r')
+        #for trk in parts:
+        #  print("x: %f, y: %f, z: %f, E: %f, pt: %f, eta: %f, phi: %f"%(trk.x,trk.y,trk.z,trk.E,trk.pt,trk.eta, trk.phi))
         new_jets = makeJets(ja,Ri,parts)
+        for trk in new_jets:
+          print("pt: %f, eta: %f, phi: %f"%(trk.pt,trk.eta, trk.phi))
+        
         area = np.zeros((phi_edges.shape[0] - 1, eta_edges.shape[0] - 1),
                         dtype=np.float64)
         leading_jetid = -1
@@ -443,19 +387,10 @@ def plot(ievt,outfile,outfile_all, ax=None, boost=False):#, reco=False, jet_algo
                   interpolation='none', origin='lower')
         # Create custom legends
         # Legend 1 is particle type
-        #line1 = ax.scatter([-100], [-100], label='$e$',marker='o', c='xkcd:black')
-        #line2 = ax.scatter([-100], [-100], label='$\mu$', marker='v', c='xkcd:black')
-        #line3 = ax.scatter([-100], [-100], label='$\gamma$', marker='s', c='xkcd:black')
-        #line4 = ax.scatter([-100], [-100], label='$\pi$', marker='P', c='xkcd:black')
-        #line5 = ax.scatter([-100], [-100], label='other hadron', marker='*', c='xkcd:black')
-        #line6 = ax.scatter([-100], [-100], label='Scalar mediator', marker='o',
-        #                  facecolors='none', edgecolors='r')
         line7 = ax.scatter([-100], [-100], label='leading jet (pt:.2%f)'%(leading_jetpt), marker='o',c='xkcd:red')
         line8 = ax.scatter([-100], [-100], label='subleading jet (pt:.2%f)'%(subleading_jetpt), marker='o',c='xkcd:green')
         line9 = ax.scatter([-100], [-100], label='jet (pt>100)', marker='o',c='xkcd:cyan')
         line10 = ax.scatter([-100], [-100], label='jet (30< pt < 100)', marker='o',c='xkcd:blue')
-        #first_legend = plt.legend(handles=[line1, line2, line3, line4, line5, line6,line7, line8,line9,line10],
-        #ax.legend(handles=[line1, line2, line3, line4, line5, line6,line7, line8,line9,line10],
         ax.legend(handles=[line7, line8,line9,line10],
                                   loc='upper right', fontsize=12)
 
@@ -483,38 +418,14 @@ def plot(ievt,outfile,outfile_all, ax=None, boost=False):#, reco=False, jet_algo
         ax.text(right, top, 'QCD',
                 horizontalalignment='right', verticalalignment='bottom',
                 transform=ax.transAxes, fontsize=12)
-        # Print details about cuts
-        #ax.text(left+0.02, bottom+0.01, 'Final particles have $P_{T}>1\,$GeV',
-        #        horizontalalignment='left', verticalalignment='bottom',
-        #        transform=ax.transAxes, fontsize=12)
-        ## Print details of scalar mediator
-        #ax.text(left+0.02, bottom+0.05, 'Scalar mediator $P_{T}=%d\,$GeV'%(scalarParticle.pt),
-        #        horizontalalignment='left', verticalalignment='bottom',
-        #        transform=ax.transAxes, fontsize=12)
         Path("Results/QCD/%s/%s_%d/"%(reco_title,jet_algo_title,int(Ri*10))).mkdir(parents=True,exist_ok=True)
         fig.savefig('Results/QCD/%s/%s_%d/QCD_Event%d.png'%(reco_title,jet_algo_title,int(Ri*10),ievt))
         fig.clear()
         plt.close(fig)
 
         if leading_jetid < len(new_jets) and multi_jetid < len(new_jets) and len(lead_jet) > 0 and leading_jetid >=0: 
-#          print(len(new_jets))
-#          print(len(lead_jet))
-#          print(leading_jetid)
           lead_jet[0] = new_jets[leading_jetid]
-          #sublead_jet[0] = new_jets[subleading_jetid]
           multi_jet[0] = new_jets[multi_jetid]
-          #submulti_jet[0] = new_jets[submulti_jetid]
-          #(lead_scalars_g, lead_isr_g) = (0,0)
-          #(multi_scalars_g, multi_isr_g) = (0,0)
-          #(lead_scalars_r, lead_isr_r) = (0,0)
-          #(multi_scalars_r, multi_isr_r) = (0,0) 
-          #(lead_scalars_g, lead_isr_g) = jet_constituents(lead_jet[0], scalars, isrs)
-          #(sublead_scalars_g, sublead_isr_g) = jet_constituents(sublead_jet[0], scalars, isrs)
-          #(multi_scalars_g, multi_isr_g) = jet_constituents(multi_jet[0], scalars, isrs)
-          #(lead_scalars_r, lead_isr_r) = jet_constituents(lead_jet[1], scalars, isrs)
-          #(sublead_scalars_r, sublead_isr_r) = jet_constituents(sublead_jet[1], scalars, isrs)
-          #(multi_scalars_r, multi_isr_r) = jet_constituents(multi_jet[1], scalars, isrs)
-          #print("width %f %f"%(jet_width(lead_jet[0]), jet_width(multi_jet[0])))
           (girth_l, trackpt_l) = jet_width(lead_jet[0])
           (girth_m, trackpt_m) = jet_width(multi_jet[0])
         
@@ -556,31 +467,6 @@ def plot(ievt,outfile,outfile_all, ax=None, boost=False):#, reco=False, jet_algo
             nvtx,numInteractions
           ))
          
-        ##dPhi = abs(lead_jet[1].phi-lead_jet[0].phi)
-        #dPhi = abs(lead_jet[1].phi-truthScalar.phi)
-        #if dPhi > math.pi:
-        #  dPhi = dPhi - 2*math.pi
-        ##dEta = lead_jet[1].eta-lead_jet[0].eta
-        #dEta = lead_jet[1].eta-truthScalar.eta
-        #dR = math.sqrt(dEta*dEta + dPhi*dPhi)
-
-        ##dPhi_m = abs(multi_jet[1].phi-multi_jet[0].phi)
-        #dPhi_m = abs(multi_jet[1].phi-truthScalar.phi)
-        #if dPhi_m > math.pi:
-        #  dPhi_m = dPhi_m - 2*math.pi
-        ##dEta_m = multi_jet[1].eta-multi_jet[0].eta
-        #dEta_m = multi_jet[1].eta-truthScalar.eta
-        #dR_m = math.sqrt(dEta_m*dEta_m + dPhi_m*dPhi_m)
-
-        #outfile.write("%d %s %.1f %d %d %d %d %d %d %d %f %f %f %f %f %f %f %f %f %d %d %d %d %d %d %d %d %d %d %d %d\n"%(ievt,jet_algo_title,Ri,
-        #              len([x for x in lead_jet[1].constituents_array() if x['pT'] > 1]),len([x for x in lead_jet[0].constituents_array() if x['pT'] > 1]),
-        #              len([x for x in sublead_jet[1].constituents_array() if x['pT'] > 1]),len([x for x in sublead_jet[0].constituents_array() if x['pT'] > 1]),
-        #              len([x for x in multi_jet[1].constituents_array() if x['pT'] > 1]),len([x for x in multi_jet[0].constituents_array() if x['pT'] > 1]),truth_trks,
-        #              lead_jet[1].pt,lead_jet[0].pt,sublead_jet[1].pt,sublead_jet[0].pt,multi_jet[1].pt,multi_jet[0].pt,truthScalar.pt,
-        #              dR,dR_m,
-        #              lead_scalars_g,lead_isr_g,lead_scalars_r,lead_isr_r,
-        #              sublead_scalars_g,sublead_isr_g,sublead_scalars_r,sublead_isr_r,
-        #              multi_scalars_g, multi_isr_g,multi_scalars_r,multi_isr_r))
 # The program runs through this loop
 # if you want multiple plots then change multi to True
 # Warning: multiplot funtion is currently broken
@@ -592,14 +478,18 @@ if multi:
 boost = False
 event = 0
 ofile_names = ["signal1000","signal400","qcd300","qcd500","qcd700","qcd1000","qcd1500","qcd2000"]
-outfile = open("jet_clustering/%s_comparisonsv2.txt"%ofile_names[ntup],"w")
-outfile.write("Event Jet_algo R pt_l pt_m ntracks_l ntracks_m girth_l girth_m mass_l mass_m trackpt_l trackpt_m suep_tracks_l isr_tracks_l suep_tracks_m isr_tracks_m total_suep total_isr\n") 
-outfile_all = open("jet_clustering/%s_comparisons_allv2.txt"%ofile_names[ntup],"w")
+#outfile = open("jet_clustering/%s_comparisonsv2.txt"%ofile_names[ntup],"w")
+#outfile.write("Event Jet_algo R pt_l pt_m ntracks_l ntracks_m girth_l girth_m mass_l mass_m trackpt_l trackpt_m suep_tracks_l isr_tracks_l suep_tracks_m isr_tracks_m total_suep total_isr\n") 
+#outfile_all = open("jet_clustering/%s_comparisons_allv2.txt"%ofile_names[ntup],"w")
+
+outfile = open("test.txt","w")
+outfile_all = open("testall.txt","w")
+
 outfile_all.write("Event Jet_algo R jet_id pt_l ntracks_l girth_l mass_l trackpt_l suep_tracks_l isr_tracks_l total_suep total_isr NVtx NumInteractions\n") 
 
 #def run(i):
-#for i in [24,45,47]:
-for i in range(0,len(tree)):
+for i in [24]:#,45,47]:
+#for i in range(0,len(tree)):
   print("Event %d/%d"%(i,len(tree)))
   ht_pass = pass_HT(i)
   if ht_pass:
