@@ -32,3 +32,4 @@ for algo in algos:
     
     for i,jet in enumerate(jets):
       print("%d %.1f %d %f %f %f %d %f"%(algo, R,i,jet.pt,jet.eta,jet.phi,len(jet.constituents()),jet.mass))
+      print(jet.constituents())

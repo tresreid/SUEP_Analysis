@@ -18,8 +18,13 @@ done
 #outdir=/publicweb/m/mreid/SUEPs/ROC
 #outdir=/publicweb/m/mreid/SUEPs/DIST
 #outdir=/publicweb/m/mreid/SUEPs/DIST2d
-outdir=/publicweb/m/mreid/SUEPs/JetAlgoComparisons_all_cpp
+#outdir=/publicweb/m/mreid/SUEPs/JetAlgoComparisons_baseline_pt/fullbox
+#outdir=/publicweb/m/mreid/SUEPs/JetAlgoComparisons_baseline_multi/pure_containment
+#outdir=/publicweb/m/mreid/SUEPs/mass_test
 #outdir=/publicweb/m/mreid/SUEPs/testdir
+#outdir=/publicweb/m/mreid/SUEPs/JetAlgoComparisons_baseline_ptv2
+#outdir=/publicweb/m/mreid/SUEPs/JetAlgoComparisons_baseline_multiv2/scalar
+outdir=/publicweb/m/mreid/SUEPs/nsubjettiness
 rm -r $outdir
 mkdir $outdir
 cp -r $dir/* $outdir

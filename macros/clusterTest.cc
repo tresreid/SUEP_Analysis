@@ -61,7 +61,10 @@ int main(int argc,char** argv){
         vector<PseudoJet> jets = sorted_by_pt(cs.inclusive_jets(30));
         for(unsigned i = 0; i < jets.size(); i++) {
           PseudoJet jet = jets[i];
-          printf("%d %.1f %d %f %f %f %d %f\n",algo, Ri,i,jet.pt(),jet.eta(),jet.phi()>M_PI? jet.phi()-2*M_PI:jet.phi(),jet.constituents().size(),sqrt(jet.m()));
+          //printf("%d %.1f %d %f %f %f %d %f\n",algo, Ri,i,jet.pt(),jet.eta(),jet.phi()>M_PI? jet.phi()-2*M_PI:jet.phi(),jet.constituents().size(),sqrt(jet.m()));
+          for (unsigned j =0; j< jet.constituents().size(); j++){
+            printf("%d %d %f %f %f %f\n",i,j,jet.constituents().at(j).pt(),jet.constituents().at(j).eta(),jet.constituents().at(j).phi(),jet.constituents().at(j).m());
+          }
         }
       }
     }
